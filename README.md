@@ -2,7 +2,7 @@
 
 A simple Neovim plugin that enhances LSP code actions with fully customizable signs, personalized actions, and server-specific mappings, making code actions more predictable.
 
-![Preview](https://github.com/luckasRanarison/clear-action.nvim/assets/101930730/84bc5a0b-a7b8-4837-b1dc-9fc4162e3fc0)
+![Preview](https://github.com/luckasRanarison/clear-action.nvim/assets/101930730/73d57753-1e9f-4d48-903b-8646908a127f)
 
 ## Installation
 
