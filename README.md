@@ -61,6 +61,7 @@ The default configuration:
     -- If there's only one code action, it gets automatically applied.
     -- The values can either be a string or a string tuple (with description)
     -- example: "<leader>aq" | { "<leader>aq", "Quickfix" }
+    apply_first = nil, -- applies first code action
     quickfix = nil, -- can be filtered with the `quickfix_filter` option bellow
     quickfix_next = nil, -- tries to fix the next diagnostic
     quickfix_prev = nil, -- tries to fix the previous diagnostic

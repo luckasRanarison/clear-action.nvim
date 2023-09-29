@@ -1,3 +1,4 @@
+local utils = require("clear-action.utils")
 local M = {}
 
 local code_action = vim.lsp.buf.code_action
@@ -20,6 +21,30 @@ M.apply = function(prefix)
       return vim.startswith(title, prefix)
     end,
   })
+end
+
+---@param client lsp.Client
+M.apply_first = function(client)
+  local bufnr = vim.api.nvim_get_current_buf()
+  local params = vim.lsp.util.make_range_params()
+
+  local function on_result(results)
+    local action = results[1]
+    local ctx = { bufnr = bufnr }
+
+    if not action then
+      vim.notify("No code actions available", vim.log.levels.INFO)
+      return
+    end
+
+    utils.handle_action(action, client, ctx)
+  end
+
+  params.context = {
+    triggerKind = vim.lsp.protocol.CodeActionTriggerKind.Invoked,
+    diagnostics = vim.lsp.diagnostic.get_line_diagnostics(),
+  }
+  utils.code_action_request(bufnr, params, on_result)
 end
 
 ---@param filters table<string, string> | nil

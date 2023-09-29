@@ -1,11 +1,13 @@
 local M = {}
 
 local config = require("clear-action.config")
+local utils = require("clear-action.utils")
 
 local is_sending = false
 local clear_extmark = function() vim.api.nvim_buf_clear_namespace(0, config.ns, 0, -1) end
 
 local function on_result(results, context)
+  is_sending = false
   local virt_text = {}
   local opts = config.options.signs
 
@@ -64,18 +66,8 @@ local function code_action_request()
     triggerKind = vim.lsp.protocol.CodeActionTriggerKind.Automatic,
     diagnostics = vim.lsp.diagnostic.get_line_diagnostics(),
   }
-
   is_sending = true
-
-  vim.lsp.buf_request(bufnr, "textDocument/codeAction", params, function(error, results, context)
-    is_sending = false
-
-    if error then
-      local message = type(error) == "string" and error or error.message
-      vim.notify("code action: " .. message, vim.log.levels.WARN)
-    end
-    if results then on_result(results, context) end
-  end)
+  utils.code_action_request(bufnr, params, on_result)
 end
 
 local function update()
@@ -86,8 +78,8 @@ local function update()
 end
 
 M.on_attach = function(bufnr)
-  local events = { "CursorMoved", "TextChanged" }
   is_sending = false
+  local events = { "CursorMoved", "TextChanged" }
 
   if config.options.signs.update_on_insert then
     vim.list_extend(events, { "CursorMovedI, TextChangedI" })

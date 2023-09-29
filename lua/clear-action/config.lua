@@ -27,6 +27,7 @@ local defaults = {
     },
   },
   mappings = {
+    apply_first = nil,
     quickfix = nil,
     quickfix_next = nil,
     quickfix_prev = nil,
