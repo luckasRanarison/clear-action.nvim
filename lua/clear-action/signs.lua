@@ -119,7 +119,7 @@ M.toggle_signs = function()
 end
 
 M.toggle_label = function()
-  config.options.signs.show_first_label = not config.options.signs.show_first_label
+  config.options.signs.show_label = not config.options.signs.show_label
   update()
 end
 
