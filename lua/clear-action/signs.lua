@@ -3,14 +3,7 @@ local M = {}
 local config = require("clear-action.config")
 
 local is_sending = false
-local extmark_id = nil
-local extmark_buf = nil
-
-local function clear_extmark()
-  if extmark_buf and vim.api.nvim_buf_is_valid(extmark_buf) and extmark_id then
-    vim.api.nvim_buf_del_extmark(extmark_buf, config.ns, extmark_id)
-  end
-end
+local clear_extmark = function() vim.api.nvim_buf_clear_namespace(0, config.ns, 0, -1) end
 
 local function on_result(results, context)
   local virt_text = {}
@@ -54,8 +47,7 @@ local function on_result(results, context)
   clear_extmark()
 
   if context_line == cursor[1] - 1 and update then
-    extmark_buf = context.bufnr
-    extmark_id = vim.api.nvim_buf_set_extmark(0, config.ns, context_line, col, {
+    vim.api.nvim_buf_set_extmark(0, config.ns, context_line, col, {
       hl_mode = "combine",
       virt_text = virt_text,
       virt_text_pos = opts.position,
@@ -95,6 +87,7 @@ end
 
 M.on_attach = function(bufnr)
   local events = { "CursorMoved", "TextChanged" }
+  is_sending = false
 
   if config.options.signs.update_on_insert then
     vim.list_extend(events, { "CursorMovedI, TextChangedI" })
