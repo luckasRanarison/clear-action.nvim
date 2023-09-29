@@ -48,7 +48,7 @@ The default configuration:
       source = "🔗",
       combined = "💡", -- used when combine is set to true
     },
-    highlights = { -- higlight groups
+    highlights = { -- highlight groups
       quickfix = "NonText",
       refactor = "NonText",
       source = "NonText",
@@ -57,11 +57,11 @@ The default configuration:
     },
   },
   mappings = {
-    -- These are just basically `vim.lsp.buf.code_action` with the `apply` option with some filters
-    -- If there's only one code action, it gets automatically applied.
     -- The values can either be a string or a string tuple (with description)
     -- example: "<leader>aq" | { "<leader>aq", "Quickfix" }
-    apply_first = nil, -- applies first code action
+    apply_first = nil, -- directly applies the first code action
+    -- These are just basically `vim.lsp.buf.code_action` with the `apply` option with some filters
+    -- If there's only one code action, it gets automatically applied.
     quickfix = nil, -- can be filtered with the `quickfix_filter` option bellow
     quickfix_next = nil, -- tries to fix the next diagnostic
     quickfix_prev = nil, -- tries to fix the previous diagnostic
