@@ -1,0 +1,6 @@
+{
+  "workspace.library": [
+    "/usr/share/nvim/runtime/lua",
+    "~/.local/share/nvim/lazy/neodev.nvim/types/stable"
+  ]
+}
