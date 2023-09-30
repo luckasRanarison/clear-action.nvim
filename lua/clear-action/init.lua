@@ -3,6 +3,7 @@ local M = {}
 local config = require("clear-action.config")
 local signs = require("clear-action.signs")
 local mappings = require("clear-action.mappings")
+local actions = require("clear-action.actions")
 
 M.setup = function(options)
   config.setup(options)
@@ -24,5 +25,7 @@ M.setup = function(options)
     end,
   })
 end
+
+M.code_action = actions.code_action
 
 return M

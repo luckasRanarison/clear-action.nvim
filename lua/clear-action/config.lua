@@ -26,7 +26,18 @@ local defaults = {
       label = "NonText",
     },
   },
+  popup = {
+    enable = true,
+    center = false,
+    border = "rounded",
+    highlights = {
+      header = "CodeActionHeader",
+      label = "CodeActionLabel",
+      title = "CodeActionTitle",
+    },
+  },
   mappings = {
+    code_action = nil,
     apply_first = nil,
     quickfix = nil,
     quickfix_next = nil,
@@ -45,6 +56,7 @@ local defaults = {
 M.options = {}
 
 M.ns = vim.api.nvim_create_namespace("clear-action")
+M.ns_popup = vim.api.nvim_create_namespace("clear-action-popup")
 
 M.augroup = vim.api.nvim_create_augroup("clear-action", {})
 

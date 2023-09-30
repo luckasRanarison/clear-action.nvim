@@ -20,6 +20,7 @@ M.on_attach = function(bufnr, client)
   local mappings = config.options.mappings
   local client_keymaps = mappings.actions[client.name]
   local quickfix_filters = config.options.quickfix_filters[client.name]
+
   local function set(mode, lhs, rhs, desc)
     vim.keymap.set(mode, lhs, rhs, {
       silent = true,
@@ -31,12 +32,7 @@ M.on_attach = function(bufnr, client)
   for name, value in pairs(mappings) do
     local key, desc = parse_value(value)
     if name ~= "actions" and key and actions[name] then
-      local arg
-      if vim.startswith(name, "quickfix") then
-        arg = quickfix_filters
-      elseif name == "apply_first" then
-        arg = client
-      end
+      local arg = vim.startswith(name, "quickfix") and quickfix_filters
       set("n", key, function() actions[name](arg) end, desc)
     end
   end
