@@ -56,9 +56,20 @@ The default configuration:
       label = "NonText",
     },
   },
+  popup = { -- remplaces the default prompt when selecting code actions
+    enable = true,
+    center = false,
+    border = "rounded",
+    highlights = {
+      header = "CodeActionHeader",
+      label = "CodeActionLabel",
+      title = "CodeActionTitle",
+    },
+  },
   mappings = {
     -- The values can either be a string or a string tuple (with description)
     -- example: "<leader>aq" | { "<leader>aq", "Quickfix" }
+    code_acton = nil, -- a modified version of `vim.lsp.buf.code_action`
     apply_first = nil, -- directly applies the first code action
     -- These are just basically `vim.lsp.buf.code_action` with the `apply` option with some filters
     -- If there's only one code action, it gets automatically applied.
