@@ -4,6 +4,8 @@ A simple Neovim plugin that enhances LSP code actions with fully customizable si
 
 ![Preview](https://github.com/luckasRanarison/clear-action.nvim/assets/101930730/73d57753-1e9f-4d48-903b-8646908a127f)
 
+![Preview](https://github.com/luckasRanarison/clear-action.nvim/assets/101930730/bdf6be6c-e463-4b60-98f7-d5d2aea4450d)
+
 ## Installation
 
 Using Lazy:
