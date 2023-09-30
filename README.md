@@ -4,6 +4,8 @@ A simple Neovim plugin that enhances LSP code actions with fully customizable si
 
 ![Preview](https://github.com/luckasRanarison/clear-action.nvim/assets/101930730/73d57753-1e9f-4d48-903b-8646908a127f)
 
+![Preview](https://github.com/luckasRanarison/clear-action.nvim/assets/101930730/bdf6be6c-e463-4b60-98f7-d5d2aea4450d)
+
 ## Installation
 
 Using Lazy:
@@ -56,9 +58,20 @@ The default configuration:
       label = "NonText",
     },
   },
+  popup = { -- remplaces the default prompt when selecting code actions
+    enable = true,
+    center = false,
+    border = "rounded",
+    highlights = {
+      header = "CodeActionHeader",
+      label = "CodeActionLabel",
+      title = "CodeActionTitle",
+    },
+  },
   mappings = {
     -- The values can either be a string or a string tuple (with description)
     -- example: "<leader>aq" | { "<leader>aq", "Quickfix" }
+    code_acton = nil, -- a modified version of `vim.lsp.buf.code_action`
     apply_first = nil, -- directly applies the first code action
     -- These are just basically `vim.lsp.buf.code_action` with the `apply` option with some filters
     -- If there's only one code action, it gets automatically applied.
