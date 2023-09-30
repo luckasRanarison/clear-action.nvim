@@ -15,7 +15,6 @@ local function create_popup(action_tuples)
   end
   local width = max_len + 5
   local height = #action_tuples + 1
-
   local row, col, position
 
   if opts.center then
