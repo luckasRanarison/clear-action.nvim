@@ -79,7 +79,7 @@ The default configuration:
       --   ["Add braces"] = { "<leader>ab", "Add braces" }
       -- }
     },
-  }
+  },
   -- This is used for filtering actions in the quickfix functions
   -- It's a map of diagnostic codes and the preferred action prefixes
   -- You can check the diagnostic codes by hovering on the diagnostic
