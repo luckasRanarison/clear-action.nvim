@@ -75,7 +75,11 @@ local function create_labels(action_tuples)
     if not used[first_letter] then
       used[first_letter] = true
       labels[title] = first_letter
-    else
+    end
+  end
+  for _, value in pairs(action_tuples) do
+    local title = value[2].title
+    if not labels[title] then
       while used[fallback] do
         fallback = string.char(fallback:byte() + 1)
       end
