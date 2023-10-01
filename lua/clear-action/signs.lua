@@ -47,7 +47,7 @@ local function on_result(results, context)
   clear_extmark()
 
   if context_line == cursor[1] - 1 and update then
-    vim.api.nvim_buf_set_extmark(0, config.ns, context_line, col, {
+    vim.api.nvim_buf_set_extmark(context.bufnr, config.ns, context_line, col, {
       hl_mode = "combine",
       virt_text = virt_text,
       virt_text_pos = opts.position,
