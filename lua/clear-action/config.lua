@@ -4,7 +4,6 @@ local M = {}
 local defaults = {
   signs = {
     enable = true,
-    timeout = 1000,
     combine = false,
     position = "eol", -- "right_align" | "overlay""
     separator = " ",

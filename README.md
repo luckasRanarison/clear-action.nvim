@@ -36,7 +36,6 @@ The default configuration:
 {
   signs = {
     enable = true,
-    timeout = 1000, -- in milliseconds
     combine = false, -- combines all action kinds into a single sign
     position = "eol", -- "right_align" | "overlay"
     separator = " ", -- signs separator

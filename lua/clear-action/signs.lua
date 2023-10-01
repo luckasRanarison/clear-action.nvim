@@ -69,9 +69,7 @@ end
 
 local function update()
   clear_extmark()
-  if config.options.signs.enable then
-    vim.defer_fn(code_action_request, config.options.signs.timeout)
-  end
+  if config.options.signs.enable then code_action_request() end
 end
 
 M.on_attach = function(bufnr)
