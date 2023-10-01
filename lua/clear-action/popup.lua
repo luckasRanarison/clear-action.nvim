@@ -61,6 +61,8 @@ local function fill_popup(bufnr, action_tuples, labels)
     vim.api.nvim_buf_add_highlight(bufnr, config.ns_popup, opts.highlights.label, i, 0, 1)
     vim.api.nvim_buf_add_highlight(bufnr, config.ns_popup, opts.highlights.title, i, 2, -1)
   end
+
+  vim.bo[bufnr].modifiable = false
 end
 
 local function create_labels(action_tuples)
