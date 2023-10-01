@@ -5,7 +5,24 @@ local function apply_action(action, client, ctx)
     vim.lsp.util.apply_workspace_edit(action.edit, client.offset_encoding)
   elseif action.command then
     local command = type(action.command) == "table" and action.command or action
-    client._exec_cmd(command, ctx)
+
+    if client._exec_cmd then
+      client._exec_cmd(command, ctx)
+    else
+      local fn = client.commands[command.command] or vim.lsp.commands[command.command]
+
+      if fn then
+        ctx.client_id = client.id
+        fn(command, ctx)
+      else
+        local params = {
+          command = command.command,
+          arguments = command.arguments,
+          workDoneToken = command.workDoneToken,
+        }
+        client.request("workspace/executeCommand", params, nil, ctx.bufnr)
+      end
+    end
   end
 end
 
@@ -26,12 +43,10 @@ M.code_action_request_all = function(bufnr, params, on_result)
 end
 
 M.handle_action = function(action, client, context)
-  local dyn_cap = client.dynamic_capabilities
-  local reg = dyn_cap and dyn_cap:get("textDocument/codeAction", { bufnr = context.bufnr })
-  local supports_resolve = vim.tbl_get(reg or {}, "registerOptions", "resolveProvider")
-    or client.supports_method("codeAction/resolve")
+  local supports_resolve = client
+      and vim.tbl_get(client.server_capabilities, "codeActionProvider", "resolveProvider")
 
-  if not action.edit and client and supports_resolve then
+  if not action.edit and supports_resolve then
     client.request("codeAction/resolve", action, function(err, resolved_action)
       if err then
         vim.notify(err.code .. ": " .. err.message, vim.log.levels.ERROR)
