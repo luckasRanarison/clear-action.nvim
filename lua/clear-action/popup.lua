@@ -102,7 +102,7 @@ local function apply_keymaps(win, bufnr, action_tuples, labels, on_select)
     vim.keymap.set("n", labels[value[2].title], function()
       on_select(value)
       close_win()
-    end, { buffer = bufnr })
+    end, { buffer = bufnr, nowait = true })
   end
 
   vim.keymap.set("n", "<Esc>", close_win, { buffer = bufnr })
