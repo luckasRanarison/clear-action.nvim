@@ -33,14 +33,14 @@ M.on_attach = function(bufnr, client)
     local key, desc = parse_value(value)
     if name ~= "actions" and key and actions[name] then
       local arg = vim.startswith(name, "quickfix") and quickfix_filters
-      set("n", key, function() actions[name](arg) end, desc)
+      set({ "n", "v" }, key, function() actions[name](arg) end, desc)
     end
   end
 
   if client_keymaps then
     for action_prefix, value in pairs(client_keymaps) do
       local key, desc = parse_value(value)
-      set("n", key, function() actions.apply(action_prefix) end, desc)
+      set({ "n", "v" }, key, function() actions.apply(action_prefix) end, desc)
     end
   end
 end
