@@ -73,10 +73,14 @@ local function code_action(options)
     context.diagnostics = vim.lsp.diagnostic.get_line_diagnostics(bufnr)
   end
 
+  local mode = vim.api.nvim_get_mode().mode
   if options.range then
     local start = options.range.start
     local end_ = options.range["end"]
     params = vim.lsp.util.make_given_range_params(start, end_)
+  elseif mode == "v" or mode == "V" then
+    local range = utils.range_from_selection(0, mode)
+    params = vim.lsp.util.make_given_range_params(range.start, range["end"])
   else
     params = vim.lsp.util.make_range_params()
   end
