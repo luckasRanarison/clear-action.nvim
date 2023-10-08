@@ -5,6 +5,29 @@ local config = require("clear-action.config")
 vim.api.nvim_set_hl(0, "CodeActionHeader", { link = "Bold" })
 vim.api.nvim_set_hl(0, "CodeActionTitle", { link = "Normal" })
 vim.api.nvim_set_hl(0, "CodeActionLabel", { fg = "#f7768e", bold = true, italic = true })
+vim.api.nvim_set_hl(0, "CodeActionCursor", { reverse=true, blend=100 })
+
+local function hide_cursor()
+    vim.opt.guicursor:append("a:CodeActionCursor/CodeActionCursor")
+end
+
+local function show_cursor()
+    vim.opt.guicursor:remove("a:CodeActionCursor/CodeActionCursor")
+end
+
+local function hide_cursor_until_leave_buffer()
+  hide_cursor()
+  vim.api.nvim_create_autocmd({"bufleave"}, {
+    callback = show_cursor,
+    buffer = 0
+  })
+end
+
+-- Hide cursor in popup
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "CodeAction",
+  callback = hide_cursor_until_leave_buffer
+})
 
 local function create_popup(action_tuples)
   local opts = config.options.popup
