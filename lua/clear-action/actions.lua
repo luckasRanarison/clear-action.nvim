@@ -21,9 +21,8 @@ local function on_code_action_results(results, context, options)
 
     local client = vim.lsp.get_client_by_id(action_tuple[1])
     local action = action_tuple[2]
-    local ctx = { bufnr = context.bufnr }
 
-    utils.handle_action(action, client, ctx)
+    utils.handle_action(action, client, context)
   end
 
   local action_tuples = {}
@@ -88,7 +87,7 @@ local function code_action(options)
   params.context = context
 
   utils.code_action_request_all(bufnr, params, function(results)
-    local ctx = { bufnr = bufnr }
+    local ctx = { bufnr = bufnr, method = "textDocument/codeAction", params = params }
     on_code_action_results(results, ctx, options)
   end)
 end
