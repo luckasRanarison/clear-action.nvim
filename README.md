@@ -61,6 +61,7 @@ The default configuration:
     enable = true,
     center = false,
     border = "rounded",
+    hide_cursor = false,
     highlights = {
       header = "CodeActionHeader",
       label = "CodeActionLabel",
