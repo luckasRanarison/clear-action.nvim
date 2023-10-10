@@ -16,7 +16,7 @@ M.setup = function(options)
       local client = vim.lsp.get_client_by_id(args.data.client_id)
       local cmd = vim.api.nvim_buf_create_user_command
 
-      if client and client.supports_method("textDocument/codeAction") then return end
+      if not client or not client.supports_method("textDocument/codeAction") then return end
 
       signs.on_attach(bufnr)
       mappings.on_attach(bufnr, client)

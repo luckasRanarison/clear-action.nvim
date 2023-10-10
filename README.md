@@ -57,7 +57,7 @@ The default configuration:
       label = "NonText",
     },
   },
-  popup = { -- remplaces the default prompt when selecting code actions
+  popup = { -- replaces the default prompt when selecting code actions
     enable = true,
     center = false,
     border = "rounded",
