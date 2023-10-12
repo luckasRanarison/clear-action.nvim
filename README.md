@@ -34,6 +34,7 @@ The default configuration:
 
 ```lua
 {
+  silent = true, -- dismiss code action requests errors
   signs = {
     enable = true,
     combine = false, -- combines all action kinds into a single sign

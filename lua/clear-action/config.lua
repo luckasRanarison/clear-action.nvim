@@ -2,6 +2,7 @@ local M = {}
 
 ---@class clear-action.options
 local defaults = {
+  silent = true,
   signs = {
     enable = true,
     combine = false,

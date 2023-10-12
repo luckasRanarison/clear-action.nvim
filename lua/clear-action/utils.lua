@@ -1,5 +1,7 @@
 local M = {}
 
+local config = require("clear-action.config")
+
 local function apply_action(action, client, ctx)
   if action.edit then
     vim.lsp.util.apply_workspace_edit(action.edit, client.offset_encoding)
@@ -23,7 +25,7 @@ end
 
 M.code_action_request = function(bufnr, params, on_result)
   vim.lsp.buf_request(bufnr, "textDocument/codeAction", params, function(error, results, context)
-    if error then
+    if error and not config.options.silent then
       local message = type(error) == "string" and error or error.message
       vim.notify("code action: " .. message, vim.log.levels.WARN)
     end
