@@ -58,11 +58,12 @@ end
 
 local function code_action_request()
   local bufnr = vim.api.nvim_get_current_buf()
+  local row, _ = unpack(vim.api.nvim_win_get_cursor(0))
   local params = vim.lsp.util.make_range_params()
 
   params.context = {
     triggerKind = vim.lsp.protocol.CodeActionTriggerKind.Automatic,
-    diagnostics = vim.lsp.diagnostic.get_line_diagnostics(),
+    diagnostics = utils.get_current_line_diagnostics(),
   }
   utils.code_action_request(bufnr, params, on_result)
 end

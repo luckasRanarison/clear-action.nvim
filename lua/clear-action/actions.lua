@@ -69,7 +69,7 @@ local function code_action(options)
     context.triggerKind = vim.lsp.protocol.CodeActionTriggerKind.Invoked
   end
   if not context.diagnostics then
-    context.diagnostics = vim.lsp.diagnostic.get_line_diagnostics(bufnr)
+    context.diagnostics = utils.get_current_line_diagnostics()
   end
 
   local mode = vim.api.nvim_get_mode().mode
@@ -121,7 +121,7 @@ M.quickfix = function(filters)
     },
     filter = function(action)
       local found = false
-      local diagnostics = vim.lsp.diagnostic.get_line_diagnostics()
+      local diagnostics = utils.get_current_line_diagnostics()
       for diag_code, fix_message in pairs(filters or {}) do
         for _, diagnostic in pairs(diagnostics) do
           if diagnostic.code == diag_code then
