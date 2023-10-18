@@ -83,4 +83,11 @@ M.range_from_selection = function(bufnr, mode)
   }
 end
 
+M.get_current_line_diagnostics = function()
+  local bufnr = vim.api.nvim_get_current_buf()
+  local row, _ = unpack(vim.api.nvim_win_get_cursor(0))
+
+  return vim.diagnostic.get(bufnr, { lnum = row })
+end
+
 return M
