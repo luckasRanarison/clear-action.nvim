@@ -77,7 +77,7 @@ M.on_attach = function(bufnr)
   local events = { "CursorMoved", "TextChanged" }
 
   if config.options.signs.update_on_insert then
-    vim.list_extend(events, { "CursorMovedI, TextChangedI" })
+    vim.list_extend(events, { "CursorMovedI", "TextChangedI" })
   else
     vim.api.nvim_create_autocmd("InsertEnter", {
       buffer = bufnr,
