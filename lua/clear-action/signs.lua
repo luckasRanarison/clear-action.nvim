@@ -19,7 +19,7 @@ local function on_result(results, context)
 
     for _, action in pairs(results) do
       for key, value in pairs(actions) do
-        if vim.startswith(action.kind, key) then actions[key] = value + 1 end
+        if action.kind and vim.startswith(action.kind, key) then actions[key] = value + 1 end
       end
     end
     for key, _ in pairs(actions) do
