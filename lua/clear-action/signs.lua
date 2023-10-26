@@ -15,11 +15,15 @@ local function on_result(results, context)
       opts.highlights.combined,
     })
   else
-    local actions = { quickfix = 0, refactor = 0, source = 0 }
+    local actions = { quickfix = 0, refactor = 0, source = 0, combined = 0 }
 
     for _, action in pairs(results) do
       for key, value in pairs(actions) do
-        if vim.startswith(action.kind, key) then actions[key] = value + 1 end
+        if action.kind and vim.startswith(action.kind, key) then
+          actions[key] = value + 1
+        else
+          actions.combined = actions.combined + 1
+        end
       end
     end
     for key, _ in pairs(actions) do
@@ -58,7 +62,6 @@ end
 
 local function code_action_request()
   local bufnr = vim.api.nvim_get_current_buf()
-  local row, _ = unpack(vim.api.nvim_win_get_cursor(0))
   local params = vim.lsp.util.make_range_params()
 
   params.context = {

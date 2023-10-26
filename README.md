@@ -48,7 +48,7 @@ The default configuration:
       quickfix = "🔧",
       refactor = "💡",
       source = "🔗",
-      combined = "💡", -- used when combine is set to true
+      combined = "💡", -- used when combine is set to true or as a fallback when there is no action kind
     },
     highlights = { -- highlight groups
       quickfix = "NonText",
