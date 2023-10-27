@@ -41,7 +41,7 @@ end
 
 M.handle_action = function(action, client, context)
   local supports_resolve = client
-    and vim.tbl_get(client.server_capabilities, "codeActionProvider", "resolveProvider")
+      and vim.tbl_get(client.server_capabilities, "codeActionProvider", "resolveProvider")
 
   if not action.edit and supports_resolve then
     client.request("codeAction/resolve", action, function(err, resolved_action)
@@ -85,9 +85,38 @@ end
 
 M.get_current_line_diagnostics = function()
   local bufnr = vim.api.nvim_get_current_buf()
-  local row, _ = unpack(vim.api.nvim_win_get_cursor(0))
+  local row = vim.api.nvim_win_get_cursor(0)[1]
+  local diagnostics = vim.diagnostic.get(bufnr, { lnum = row - 1 })
+  local lsp_diagnostics = vim.tbl_map(function(value)
+    local diagnostic = {
+      code = value.code,
+      message = value.message,
+      severity = value.severity,
+      source = value.source,
+      range = {
+        start = {
+          character = value.col,
+          line = value.lnum,
+        },
+        ["end"] = {
+          character = value.end_col,
+          line = value.end_lnum,
+        }
+      }
+    }
+    local lsp_data = vim.tbl_get(value, "user_data", "lsp")
 
-  return vim.diagnostic.get(bufnr, { lnum = row })
+    if lsp_data then
+      diagnostic.codeDescription = lsp_data.codeDescription
+      diagnostic.tags = lsp_data.tags
+      diagnostic.relatedInformation = lsp_data.relatedInformation
+      diagnostic.data = lsp_data.data
+    end
+
+    return diagnostic
+  end, diagnostics)
+
+  return lsp_diagnostics
 end
 
 return M
