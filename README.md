@@ -72,6 +72,8 @@ The default configuration:
   mappings = {
     -- The values can either be a string or a string tuple (with description)
     -- example: "<leader>aq" | { "<leader>aq", "Quickfix" }
+    -- Or if you want more control: { key = "leader<aq>", mode = { "n" }, options = { desc = "Quickfix" } }
+    -- `options` accetps the same keys as vim.keymap.set()
     code_action = nil, -- a modified version of `vim.lsp.buf.code_action`
     apply_first = nil, -- directly applies the first code action
     -- These are just basically `vim.lsp.buf.code_action` with the `apply` option with some filters

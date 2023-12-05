@@ -4,16 +4,20 @@ local config = require("clear-action.config")
 local actions = require("clear-action.actions")
 
 local function parse_value(value)
-  local key, desc
+  if not vim.tbl_islist(value) then return value end
+
+  local opts = {
+    options = {},
+  }
 
   if type(value) == "string" then
-    key = value
+    opts.key = value
   elseif type(value) == "table" then
-    key = value[1]
-    desc = value[2]
+    opts.key = value[1]
+    opts.options.desc = value[2]
   end
 
-  return key, desc
+  return opts
 end
 
 M.on_attach = function(bufnr, client)
@@ -21,26 +25,30 @@ M.on_attach = function(bufnr, client)
   local client_keymaps = mappings.actions[client.name]
   local quickfix_filters = config.options.quickfix_filters[client.name]
 
-  local function set(mode, lhs, rhs, desc)
-    vim.keymap.set(mode, lhs, rhs, {
-      silent = true,
-      buffer = bufnr,
-      desc = desc,
-    })
+  local function set(opts, action)
+    vim.keymap.set(
+      opts.mode or { "n", "v" },
+      opts.key,
+      action,
+      vim.tbl_extend("force", {
+        silent = true,
+        buffer = bufnr,
+      }, opts.options or {})
+    )
   end
 
   for name, value in pairs(mappings) do
-    local key, desc = parse_value(value)
-    if name ~= "actions" and key and actions[name] then
+    local opts = parse_value(value)
+    if name ~= "actions" and opts.key and actions[name] then
       local arg = vim.startswith(name, "quickfix") and quickfix_filters
-      set({ "n", "v" }, key, function() actions[name](arg) end, desc)
+      set(opts, function() actions[name](arg) end)
     end
   end
 
   if client_keymaps then
     for action_prefix, value in pairs(client_keymaps) do
-      local key, desc = parse_value(value)
-      set({ "n", "v" }, key, function() actions.apply(action_prefix) end, desc)
+      local opts = parse_value(value)
+      set(opts, function() actions.apply(action_prefix) end)
     end
   end
 end
