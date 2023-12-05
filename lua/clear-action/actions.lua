@@ -29,7 +29,11 @@ local function on_code_action_results(results, context, options)
 
   for client_id, result in pairs(results) do
     for _, action in pairs(result.result or {}) do
-      if action_filter(action) then table.insert(action_tuples, { client_id, action }) end
+      if action_filter(action) then
+        action.title = action.title:gsub("\r\n", "\\r\\n")
+        action.title = action.title:gsub("\n", "\\n")
+        table.insert(action_tuples, { client_id, action })
+      end
     end
   end
 
@@ -48,8 +52,7 @@ local function on_code_action_results(results, context, options)
         prompt = "Code actions:",
         kind = "codeaction",
         format_item = function(action_tuple)
-          local action = action_tuple[2]
-          return vim.trim(action.title)
+          return action_tuple[2].title
         end,
       }, on_select)
     end
