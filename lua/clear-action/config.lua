@@ -6,6 +6,7 @@ local defaults = {
   signs = {
     enable = true,
     combine = false,
+    priority = 200,
     position = "eol", -- "right_align" | "overlay""
     separator = " ",
     show_count = true,

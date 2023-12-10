@@ -55,7 +55,7 @@ local function on_result(results, context)
       hl_mode = "combine",
       virt_text = virt_text,
       virt_text_pos = opts.position,
-      priority = 200,
+      priority = opts.priority,
     })
   end
 end

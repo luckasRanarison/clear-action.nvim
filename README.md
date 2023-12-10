@@ -38,6 +38,7 @@ The default configuration:
   signs = {
     enable = true,
     combine = false, -- combines all action kinds into a single sign
+    priority = 200, -- extmark priority
     position = "eol", -- "right_align" | "overlay"
     separator = " ", -- signs separator
     show_count = true, -- show the number of each action kind
