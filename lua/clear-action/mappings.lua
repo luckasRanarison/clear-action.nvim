@@ -4,7 +4,7 @@ local config = require("clear-action.config")
 local actions = require("clear-action.actions")
 
 local function parse_value(value)
-  if not vim.tbl_islist(value) then return value end
+  if type(value) == "table" and not vim.tbl_islist(value) then return value end
 
   local opts = {
     options = {},
