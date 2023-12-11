@@ -28,11 +28,22 @@ M.hide_cursor_autocmd = function()
   })
 end
 
+local function lsp_client_display_name(client_id)
+  local client = vim.lsp.get_client_by_id(client_id)
+  log(client_id, client)
+  if client then
+    return " (" .. client.name .. ")"
+  else
+    return ""
+  end
+end
+
 local function create_popup(action_tuples)
   local opts = config.options.popup
   local max_len = 0
   for _, value in pairs(action_tuples) do
-    local len = #value[2].title
+    local final_string = value[2].title .. lsp_client_display_name(value[1])
+    local len = #final_string
     if max_len < len then max_len = len end
   end
   local width = max_len + 5
@@ -72,7 +83,7 @@ local function fill_popup(bufnr, action_tuples, labels)
 
   local lines = vim.tbl_map(function(value)
     local title = value[2].title
-    return labels[title] .. " " .. title
+    return labels[title] .. " " .. title .. lsp_client_display_name(value[1])
   end, action_tuples)
 
   table.insert(lines, 1, "Code actions:")
