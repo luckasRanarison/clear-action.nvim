@@ -35,7 +35,7 @@ end
 
 M.code_action_request_all = function(bufnr, params, on_result)
   vim.lsp.buf_request_all(bufnr, "textDocument/codeAction", params, function(results)
-    if results then on_result(results) end
+    if results then on_result(results, params.range.start.line, bufnr) end
   end)
 end
 

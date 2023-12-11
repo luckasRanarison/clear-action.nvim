@@ -5,19 +5,29 @@ local utils = require("clear-action.utils")
 
 local clear_extmark = function() vim.api.nvim_buf_clear_namespace(0, config.ns, 0, -1) end
 
-local function on_result(results, context)
+local function on_result(results_all, line, bufnr)
+  local result_count = 0
+  local result_actions_flat = {}
+  for client_id, results in pairs(results_all) do
+    if results.result ~= nil then
+      result_count = result_count + #results.result
+      for _, action in pairs(results.result) do
+        table.insert(result_actions_flat, action)
+      end
+    end
+  end
   local virt_text = {}
   local opts = config.options.signs
 
-  if opts.combine and #results > 0 then
+  if opts.combine and result_count > 0 then
     table.insert(virt_text, {
-      opts.icons.combined .. (opts.show_count and #results or ""),
+      opts.icons.combined .. (opts.show_count and result_count or ""),
       opts.highlights.combined,
     })
   else
     local actions = { quickfix = 0, refactor = 0, source = 0, combined = 0 }
 
-    for _, action in pairs(results) do
+    for _, action in pairs(result_actions_flat) do
       if action.kind then
         for key, value in pairs(actions) do
           if vim.startswith(action.kind, key) then
@@ -25,7 +35,7 @@ local function on_result(results, context)
           end
         end
       else
-        actions.combined = actions.combined + 1
+        actions.combined = actions.combined + 1 -- Shouldn't we not count any actions that have no kind?
       end
     end
     for key, _ in pairs(actions) do
@@ -39,21 +49,20 @@ local function on_result(results, context)
     end
   end
 
-  if #results > 0 and opts.show_label then
+  if result_count > 0 and opts.show_label then
     table.insert(virt_text, { opts.separator })
-    table.insert(virt_text, { opts.label_fmt(results), opts.highlights.label })
+    table.insert(virt_text, { opts.label_fmt(result_actions_flat), opts.highlights.label })
   end
 
   local cursor = vim.api.nvim_win_get_cursor(0)
   local col = opts.position == "overlay" and (cursor[2] + 1) or 0
-  local context_line = context.params.range.start.line
   local is_insert = vim.fn.mode() == "i"
   local update = opts.update_on_insert == is_insert
 
   clear_extmark()
 
-  if context_line == cursor[1] - 1 and update then
-    vim.api.nvim_buf_set_extmark(context.bufnr, config.ns, context_line, col, {
+  if line == cursor[1] - 1 and update then
+    vim.api.nvim_buf_set_extmark(bufnr, config.ns, line, col, {
       hl_mode = "combine",
       virt_text = virt_text,
       virt_text_pos = opts.position,
@@ -70,7 +79,7 @@ local function code_action_request()
     triggerKind = vim.lsp.protocol.CodeActionTriggerKind.Automatic,
     diagnostics = utils.get_current_line_diagnostics(),
   }
-  utils.code_action_request(bufnr, params, on_result)
+  utils.code_action_request_all(bufnr, params, on_result)
 end
 
 local function update()
