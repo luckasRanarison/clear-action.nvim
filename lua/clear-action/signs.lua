@@ -18,12 +18,14 @@ local function on_result(results, context)
     local actions = { quickfix = 0, refactor = 0, source = 0, combined = 0 }
 
     for _, action in pairs(results) do
-      for key, value in pairs(actions) do
-        if action.kind and vim.startswith(action.kind, key) then
-          actions[key] = value + 1
-        else
-          actions.combined = actions.combined + 1
+      if action.kind then
+        for key, value in pairs(actions) do
+          if vim.startswith(action.kind, key) then
+            actions[key] = value + 1
+          end
         end
+      else
+        actions.combined = actions.combined + 1
       end
     end
     for key, _ in pairs(actions) do
