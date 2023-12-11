@@ -35,7 +35,7 @@ local function on_result(results_all, line, bufnr)
           end
         end
       else
-        actions.combined = actions.combined + 1 -- Shouldn't we not count any actions that have no kind?
+        actions.combined = actions.combined + 1
       end
     end
     for key, _ in pairs(actions) do
