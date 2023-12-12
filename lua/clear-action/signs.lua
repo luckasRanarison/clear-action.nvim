@@ -8,14 +8,16 @@ local clear_extmark = function() vim.api.nvim_buf_clear_namespace(0, config.ns, 
 local function on_result(results_all, line, bufnr)
   local count = 0
   local flat = {}
+
   for client_id, results in pairs(results_all) do
     if results.result ~= nil then
       count = count + #results.result
       for _, action in pairs(results.result) do
-        table.insert(flat, vim.tbl_extend("error", action, {client_id = client_id}))
+        table.insert(flat, vim.tbl_extend("error", action, { client_id = client_id }))
       end
     end
   end
+
   local virt_text = {}
   local opts = config.options.signs
 
