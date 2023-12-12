@@ -32,7 +32,7 @@ local function lsp_client_display_name(client_id)
   local client = vim.lsp.get_client_by_id(client_id)
   log(client_id, client)
   if client then
-    return " (" .. client.name .. ")"
+    return " " .. client.name
   else
     return ""
   end
@@ -90,9 +90,12 @@ local function fill_popup(bufnr, action_tuples, labels)
   vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, lines)
   vim.api.nvim_buf_add_highlight(bufnr, config.ns_popup, opts.highlights.header, 0, 0, -1)
 
+  log('at', action_tuples)
   for i = 1, #action_tuples do
     vim.api.nvim_buf_add_highlight(bufnr, config.ns_popup, opts.highlights.label, i, 0, 1)
-    vim.api.nvim_buf_add_highlight(bufnr, config.ns_popup, opts.highlights.title, i, 2, -1)
+    local len = #action_tuples[i][2].title
+    vim.api.nvim_buf_add_highlight(bufnr, config.ns_popup, opts.highlights.title, i, 2, len + 2)
+    vim.api.nvim_buf_add_highlight(bufnr, config.ns_popup, opts.highlights.lsp, i, len + 2, -1)
   end
 
   vim.bo[bufnr].modifiable = false
