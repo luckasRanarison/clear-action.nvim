@@ -12,7 +12,7 @@ local function on_result(results_all, line, bufnr)
     if results.result ~= nil then
       count = count + #results.result
       for _, action in pairs(results.result) do
-        table.insert(flat, action)
+        table.insert(flat, vim.tbl_extend("error", action, {client_id = client_id}))
       end
     end
   end
