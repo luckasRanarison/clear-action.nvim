@@ -6,28 +6,28 @@ local utils = require("clear-action.utils")
 local clear_extmark = function() vim.api.nvim_buf_clear_namespace(0, config.ns, 0, -1) end
 
 local function on_result(results_all, line, bufnr)
-  local result_count = 0
-  local result_actions_flat = {}
+  local count = 0
+  local flat = {}
   for client_id, results in pairs(results_all) do
     if results.result ~= nil then
-      result_count = result_count + #results.result
+      count = count + #results.result
       for _, action in pairs(results.result) do
-        table.insert(result_actions_flat, action)
+        table.insert(flat, action)
       end
     end
   end
   local virt_text = {}
   local opts = config.options.signs
 
-  if opts.combine and result_count > 0 then
+  if opts.combine and count > 0 then
     table.insert(virt_text, {
-      opts.icons.combined .. (opts.show_count and result_count or ""),
+      opts.icons.combined .. (opts.show_count and count or ""),
       opts.highlights.combined,
     })
   else
     local actions = { quickfix = 0, refactor = 0, source = 0, combined = 0 }
 
-    for _, action in pairs(result_actions_flat) do
+    for _, action in pairs(flat) do
       if action.kind then
         for key, value in pairs(actions) do
           if vim.startswith(action.kind, key) then
@@ -49,9 +49,9 @@ local function on_result(results_all, line, bufnr)
     end
   end
 
-  if result_count > 0 and opts.show_label then
+  if count > 0 and opts.show_label then
     table.insert(virt_text, { opts.separator })
-    table.insert(virt_text, { opts.label_fmt(result_actions_flat), opts.highlights.label })
+    table.insert(virt_text, { opts.label_fmt(flat), opts.highlights.label })
   end
 
   local cursor = vim.api.nvim_win_get_cursor(0)
