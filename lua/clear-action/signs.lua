@@ -100,11 +100,15 @@ M.on_attach = function(bufnr)
     })
   end
 
+  if vim.b[bufnr].is_update_autocmd_set then
+    return
+  end
   vim.api.nvim_create_autocmd(events, {
     buffer = bufnr,
     group = config.augroup,
     callback = update,
   })
+  vim.b[bufnr].is_update_autocmd_set = true
 end
 
 M.toggle_signs = function()
