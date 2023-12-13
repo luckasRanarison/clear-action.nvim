@@ -36,6 +36,7 @@ local defaults = {
       header = "CodeActionHeader",
       label = "CodeActionLabel",
       title = "CodeActionTitle",
+      lsp = "Comment",
     },
   },
   mappings = {
