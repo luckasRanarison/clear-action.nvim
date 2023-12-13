@@ -28,9 +28,8 @@ M.hide_cursor_autocmd = function()
   })
 end
 
-local function lsp_client_display_name(client_id)
+local function client_name(client_id)
   local client = vim.lsp.get_client_by_id(client_id)
-  log(client_id, client)
   if client then
     return " " .. client.name
   else
@@ -42,8 +41,10 @@ local function create_popup(action_tuples)
   local opts = config.options.popup
   local max_len = 0
   for _, value in pairs(action_tuples) do
-    local final_string = value[2].title .. lsp_client_display_name(value[1])
-    local len = #final_string
+    local len = #value[2].title
+    if not config.options.popup.hide_client then
+      len = len + #client_name(value[1])
+    end
     if max_len < len then max_len = len end
   end
   local width = max_len + 5
@@ -83,14 +84,17 @@ local function fill_popup(bufnr, action_tuples, labels)
 
   local lines = vim.tbl_map(function(value)
     local title = value[2].title
-    return labels[title] .. " " .. title .. lsp_client_display_name(value[1])
+    local row = labels[title] .. " " .. title
+    if not config.options.popup.hide_client then
+      row = row .. client_name(value[1])
+    end
+    return row
   end, action_tuples)
 
   table.insert(lines, 1, "Code actions:")
   vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, lines)
   vim.api.nvim_buf_add_highlight(bufnr, config.ns_popup, opts.highlights.header, 0, 0, -1)
 
-  log('at', action_tuples)
   for i = 1, #action_tuples do
     vim.api.nvim_buf_add_highlight(bufnr, config.ns_popup, opts.highlights.label, i, 0, 1)
     local len = #action_tuples[i][2].title
