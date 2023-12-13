@@ -30,11 +30,7 @@ end
 
 local function client_name(client_id)
   local client = vim.lsp.get_client_by_id(client_id)
-  if client then
-    return " " .. client.name
-  else
-    return ""
-  end
+  return client and client.name or ""
 end
 
 local function create_popup(action_tuples)
@@ -86,7 +82,7 @@ local function fill_popup(bufnr, action_tuples, labels)
     local title = value[2].title
     local row = labels[title] .. " " .. title
     if not config.options.popup.hide_client then
-      row = row .. client_name(value[1])
+      row = row .. " " .. client_name(value[1])
     end
     return row
   end, action_tuples)
@@ -95,9 +91,9 @@ local function fill_popup(bufnr, action_tuples, labels)
   vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, lines)
   vim.api.nvim_buf_add_highlight(bufnr, config.ns_popup, opts.highlights.header, 0, 0, -1)
 
-  for i = 1, #action_tuples do
+  for i, action_tuple in ipairs(action_tuples) do
     vim.api.nvim_buf_add_highlight(bufnr, config.ns_popup, opts.highlights.label, i, 0, 1)
-    local len = #action_tuples[i][2].title
+    local len = #action_tuple[2].title
     vim.api.nvim_buf_add_highlight(bufnr, config.ns_popup, opts.highlights.title, i, 2, len + 2)
     vim.api.nvim_buf_add_highlight(bufnr, config.ns_popup, opts.highlights.lsp, i, len + 2, -1)
   end
