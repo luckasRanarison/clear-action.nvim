@@ -43,7 +43,7 @@ local function create_popup(action_tuples)
     end
     if max_len < len then max_len = len end
   end
-  local width = max_len + 5
+  local width = max_len + 6
   local height = #action_tuples + 1
   local row, col, position
 
