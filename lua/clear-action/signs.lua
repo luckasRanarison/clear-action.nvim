@@ -6,6 +6,8 @@ local utils = require("clear-action.utils")
 local clear_extmark = function() vim.api.nvim_buf_clear_namespace(0, config.ns, 0, -1) end
 
 local function on_result(results_all, line, bufnr)
+  if not vim.api.nvim_buf_is_valid(bufnr) then return end
+
   local count = 0
   local flat = {}
 
@@ -32,9 +34,7 @@ local function on_result(results_all, line, bufnr)
     for _, action in pairs(flat) do
       if action.kind then
         for key, value in pairs(actions) do
-          if vim.startswith(action.kind, key) then
-            actions[key] = value + 1
-          end
+          if vim.startswith(action.kind, key) then actions[key] = value + 1 end
         end
       else
         actions.combined = actions.combined + 1
@@ -102,9 +102,7 @@ M.on_attach = function(bufnr)
     })
   end
 
-  if vim.b[bufnr].is_update_autocmd_set then
-    return
-  end
+  if vim.b[bufnr].is_update_autocmd_set then return end
   vim.api.nvim_create_autocmd(events, {
     buffer = bufnr,
     group = config.augroup,
