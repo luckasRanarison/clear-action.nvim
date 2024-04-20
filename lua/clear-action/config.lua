@@ -53,6 +53,7 @@ local defaults = {
     actions = {},
   },
   quickfix_filters = {},
+  action_labels = {},
 }
 
 ---@type clear-action.options
