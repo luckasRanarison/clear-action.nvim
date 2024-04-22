@@ -109,10 +109,18 @@ local function create_labels(action_tuples)
   for _, value in pairs(action_tuples) do
     local title = value[2].title
     local first_letter = title:sub(1, 1):lower()
+    local client = client_name(value[1])
 
-    if not used[first_letter] then
-      used[first_letter] = true
-      labels[title] = first_letter
+    local user_defined = config.options.action_labels[client][title]
+
+    if user_defined then
+      used[user_defined] = true
+      labels[title] = user_defined
+    else
+      if not used[first_letter] then
+        used[first_letter] = true
+        labels[title] = first_letter
+      end
     end
   end
   for _, value in pairs(action_tuples) do

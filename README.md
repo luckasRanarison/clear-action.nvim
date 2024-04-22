@@ -110,6 +110,14 @@ The default configuration:
     --   ["unused-local"] = "Disable diagnostics on this line",
     -- },
   },
+  action_labels = {
+    -- example:
+    -- ["dartls"] = {
+    --   "Wrap with widget..." = "w",
+    --   "Wrap with Padding" = "p",
+    --   "Wrap with Center" = "c",
+    -- },
+  },
 }
 ```
 
