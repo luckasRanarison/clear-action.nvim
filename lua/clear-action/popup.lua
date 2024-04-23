@@ -111,7 +111,7 @@ local function create_labels(action_tuples)
     local first_letter = title:sub(1, 1):lower()
     local client = client_name(value[1])
 
-    local user_defined = config.options.action_labels[client][title]
+    local user_defined = (config.options.action_labels[client] or {})[title]
 
     if user_defined then
       used[user_defined] = true
