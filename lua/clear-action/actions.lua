@@ -147,7 +147,7 @@ end
 
 ---@param filters table<string, string> | nil
 M.quickfix_prev = function(filters)
-  vim.diagnostic.get_prev()
+  vim.diagnostic.goto_prev()
   M.quickfix(filters)
 end
 
