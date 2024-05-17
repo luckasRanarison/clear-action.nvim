@@ -3,8 +3,10 @@ local M = {}
 local config = require("clear-action.config")
 local actions = require("clear-action.actions")
 
+local islist = vim.fn.has("nvim-0.10") and vim.islist or vim.tbl_islist
+
 local function parse_value(value)
-  if type(value) == "table" and not vim.tbl_islist(value) then return value end
+  if type(value) == "table" and not islist(value) then return value end
 
   local opts = {
     options = {},
